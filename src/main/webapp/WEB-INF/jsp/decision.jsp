@@ -20,9 +20,18 @@
                 <%--@elvariable id="criterion" type="ua.kharkov.nure.sharaban.model.Criterion"--%>
                 <c:forEach items="${criteria}" var="criterion" varStatus="i">
                     <div class="row">
-                        <input type="hidden" value="${criterion.id}">
                         <div>${i.count}. ${criterion.name}</div>
-                        <input type="text" name="marks" class="form-control" placeholder="Enter mark">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <input type="text" name="marks" class="form-control" placeholder="Enter mark">
+                            </div>
+                            <div class="col-sm-6">
+                                Priority:
+                                <c:forEach var="priority" begin="1" end="5">
+                                    <input type="radio" name="${criterion.id}-priority" value="${priority}">${priority}&emsp;
+                                </c:forEach>
+                            </div>
+                        </div>
                     </div>
                 </c:forEach>
 

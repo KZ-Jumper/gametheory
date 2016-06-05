@@ -26,6 +26,10 @@ public class Mark {
     @Column
     private int normalizedMark;
 
+    @ManyToOne
+    @JoinColumn(name = "lprId", nullable = false)
+    private LPR user;
+
     public Long getId() {
         return id;
     }
@@ -72,5 +76,13 @@ public class Mark {
 
     public void setNormalizedMark(int normalizedMark) {
         this.normalizedMark = normalizedMark;
+    }
+
+    public LPR getUser() {
+        return user;
+    }
+
+    public void setUser(LPR user) {
+        this.user = user;
     }
 }

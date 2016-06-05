@@ -10,6 +10,8 @@ public interface MarkService {
 
     Mark getMarkById(long id);
 
+    List<Mark> findMarksByAlternativeIdAndUserId(long alternativeId, long userId);
+
     Mark saveOrUpdateMark(Mark mark);
 
     void deleteMark(long id);
