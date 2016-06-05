@@ -10,6 +10,8 @@ public interface ResultService {
 
     Result getResultById(long id);
 
+    List<Result> getResultByUserId(long userId);
+
     Result saveOrUpdateResult(Result result);
 
     void deleteResult(long id);

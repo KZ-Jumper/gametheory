@@ -6,14 +6,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ua.kharkov.nure.sharaban.method.ConfirmLeaderGame;
 import ua.kharkov.nure.sharaban.model.*;
-import ua.kharkov.nure.sharaban.service.AlternativeService;
-import ua.kharkov.nure.sharaban.service.CriterionService;
-import ua.kharkov.nure.sharaban.service.MarkService;
-import ua.kharkov.nure.sharaban.service.VectorService;
+import ua.kharkov.nure.sharaban.service.*;
 import ua.kharkov.nure.sharaban.service.decision.individual.IndividualDecisionHelper;
 import ua.kharkov.nure.sharaban.service.normalization.MarkNormalizationService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -32,6 +31,9 @@ public class DecisionController {
 
     @Autowired
     private VectorService vectorService;
+
+    @Autowired
+    private ResultService resultService;
 
     @Autowired
     private MarkNormalizationService normalizationService;
@@ -63,6 +65,9 @@ public class DecisionController {
                 mark.setCriterion(criteria.get(i));
                 mark.setName("mark");
                 mark.setMarkNumberEquivalent(marks[i]);
+
+                normalizationService.doNormalization(alternative.getId(), criteria.get(i).getId(), mark);
+
                 mark.setRange(priority);
                 mark.setUser((LPR) model.get("user"));
                 mark = markService.saveOrUpdateMark(mark);
@@ -74,7 +79,9 @@ public class DecisionController {
             }
         }
 
-        return "redirect:/decide/methods";
+        model.addAttribute("alternatives", alternatives);
+
+        return "methods";
     }
 
     @RequestMapping(value = "/methods", method = RequestMethod.GET)
@@ -83,15 +90,24 @@ public class DecisionController {
     }
 
     @RequestMapping(value = "/methods/{id}/result", method = RequestMethod.GET)
-    public String view(@PathVariable int id, ModelMap model) {
-        if (id == 1) {
-            List<Alternative> alternatives = alternativeService.getAllAlternatives();
+    public String view(@PathVariable int id, ModelMap model, @RequestParam(required = false) int[] ids) {
+        LPR user = (LPR) model.get("user");
 
-            //normalizationService.doNormalization();
-            individualDecisionHelper.makeDecision((LPR) model.get("user"));
+        if (id == 1) {
+            individualDecisionHelper.makeDecision(user);
         } else if (id == 2) {
-            leaderGame.confirmLeader((LPR) model.get("user")); //TODO stub
+            leaderGame.confirmLeader(user, ids);
         }
+
+        List<Result> results = resultService.getResultByUserId(user.getId());
+        Collections.sort(results, new Comparator<Result>() {
+
+            @Override
+            public int compare(Result o1, Result o2) {
+                return o1.getRange() - o2.getRange();
+            }
+        });
+        model.addAttribute("results", results);
 
         return "result";
     }
