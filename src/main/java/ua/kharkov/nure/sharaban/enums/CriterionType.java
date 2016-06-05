@@ -1,8 +1,6 @@
 package ua.kharkov.nure.sharaban.enums;
 
 public interface CriterionType {
-
-    String QUANTITATIVE = "quantitative";
-
-    String QUALITATIVE = "qualitative";
+    String QUANTITY = "quantity";
+    String QUALITY = "quality";
 }

@@ -7,15 +7,15 @@ import javax.persistence.*;
 public class Result {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "lprId")
+    @JoinColumn(name = "lprId", nullable = false)
     private LPR lpr;
 
     @ManyToOne
-    @JoinColumn(name = "alternativeId")
+    @JoinColumn(name = "alternativeId", nullable = false)
     private Alternative alternative;
 
     @Column(name = "resultRange")

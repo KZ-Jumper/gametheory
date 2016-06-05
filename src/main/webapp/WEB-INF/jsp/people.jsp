@@ -3,7 +3,7 @@
 <html>
     <head>
         <title>People</title>
-        <link rel="stylesheet" href="resources/css/bootstrap.min.css">
+        <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap.min.css"/>">
     </head>
     <body>
         <div class="container">
@@ -13,6 +13,13 @@
                     <c:choose>
                         <c:when test="${not empty user.name}">
                             <h3>Hello, ${user.name}! Your range is ${user.range}.</h3>
+                            <a href="<c:url value="/logout"/>" class="btn btn-primary">Logout</a>
+                            <a href="<c:url value="/decide"/>" class="btn btn-info">Make decision</a>
+                            <c:if test="${user.name eq 'Admin'}">
+                                <a href="<c:url value="/alternatives"/>" class="btn btn-default">Alternatives</a>
+                                <a href="<c:url value="/criteria"/>" class="btn btn-default">Criteria</a>
+                                <a href="<c:url value="/marks"/>" class="btn btn-default">Marks</a>
+                            </c:if>
                         </c:when>
                         <c:otherwise>
                             <h3>Enter your name, please!</h3>

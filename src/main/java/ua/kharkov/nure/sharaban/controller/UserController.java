@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 import ua.kharkov.nure.sharaban.model.LPR;
 import ua.kharkov.nure.sharaban.service.LPRService;
 
@@ -39,4 +40,10 @@ public class UserController {
         return "redirect:/";
     }
 
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(ModelMap model) {
+        model.addAttribute("user", new LPR());
+
+        return "redirect:/";
+    }
 }
