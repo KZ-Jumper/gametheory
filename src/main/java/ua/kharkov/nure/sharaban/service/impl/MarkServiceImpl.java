@@ -27,6 +27,11 @@ public class MarkServiceImpl implements MarkService {
     }
 
     @Override
+    public List<Mark> findMarksByAlternativeIdAndUserId(long alternativeId, long userId) {
+        return markPersistence.findMarksByAlternativeIdAndUserId(alternativeId, userId);
+    }
+
+    @Override
     @Transactional
     public Mark saveOrUpdateMark(Mark mark) {
         return markPersistence.save(mark);
