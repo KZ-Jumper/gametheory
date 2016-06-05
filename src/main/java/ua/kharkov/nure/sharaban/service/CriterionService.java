@@ -8,7 +8,11 @@ public interface CriterionService {
 
     List<Criterion> getAllCriteria();
 
+    List<String> getAllCriteriaNames();
+
     Criterion getCriterionById(long id);
+
+    Criterion getCriterionByName(String name);
 
     Criterion saveOrUpdateCriterion(Criterion criterion);
 

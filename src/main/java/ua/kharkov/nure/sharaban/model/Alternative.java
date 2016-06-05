@@ -7,7 +7,8 @@ import javax.persistence.*;
 public class Alternative {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
     private Long id;
 
     @Column(nullable = false, unique = true)

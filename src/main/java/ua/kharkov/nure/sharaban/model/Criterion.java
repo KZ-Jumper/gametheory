@@ -7,16 +7,16 @@ import javax.persistence.*;
 public class Criterion {
 
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(name = "criterionRange")
+    @Column(name = "criterionRange", columnDefinition = "int default 0")
     private int range;
 
-    @Column
+    @Column(columnDefinition = "int default 0")
     private int weight;
 
     @Column
@@ -30,6 +30,12 @@ public class Criterion {
 
     @Column
     private String scaleType;
+
+    @Column(name = "max_value", columnDefinition = "int default 0")
+    private int minValue;
+
+    @Column(name = "min_value", columnDefinition = "int default 0")
+    private int maxValue;
 
     public long getId() {
         return id;
@@ -93,5 +99,21 @@ public class Criterion {
 
     public void setScaleType(String scaleType) {
         this.scaleType = scaleType;
+    }
+
+    public int getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(int minValue) {
+        this.minValue = minValue;
+    }
+
+    public int getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(int maxValue) {
+        this.maxValue = maxValue;
     }
 }

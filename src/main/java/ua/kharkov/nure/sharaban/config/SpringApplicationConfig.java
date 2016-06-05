@@ -94,7 +94,6 @@ public class SpringApplicationConfig {
 
     private Properties jpaProperties() throws Exception {
         Properties jpaProp = new Properties();
-        jpaProp.put("hibernate.show_sql", "true");
         jpaProp.put("hibernate.hbm2ddl.auto", hibernateHbm2ddl);
         jpaProp.put("hibernate.dialect", hibernateDialect);
         return jpaProp;

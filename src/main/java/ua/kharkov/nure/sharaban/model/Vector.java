@@ -7,15 +7,15 @@ import javax.persistence.*;
 public class Vector {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "alternativeId")
+    @JoinColumn(name = "alternativeId", nullable = false)
     private Alternative alternative;
 
     @ManyToOne
-    @JoinColumn(name = "markId")
+    @JoinColumn(name = "markId", nullable = false)
     private Mark mark;
 
     public Long getId() {

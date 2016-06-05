@@ -7,11 +7,11 @@ import javax.persistence.*;
 public class Mark {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "criterionId")
+    @JoinColumn(name = "criterionId", nullable = false)
     private Criterion criterion;
 
     @Column
