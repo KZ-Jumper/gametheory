@@ -1,7 +1,7 @@
 package ua.kharkov.nure.sharaban.service.normalization.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import ua.kharkov.nure.sharaban.model.Alternative;
+import org.springframework.stereotype.Component;
 import ua.kharkov.nure.sharaban.model.Build;
 import ua.kharkov.nure.sharaban.model.Criterion;
 import ua.kharkov.nure.sharaban.model.Mark;
@@ -11,7 +11,9 @@ import ua.kharkov.nure.sharaban.service.normalization.MarkNormalizationService;
 
 import java.util.Map;
 
+@Component
 public class MarkNormalizationServiceImpl implements MarkNormalizationService {
+
 	@Autowired
 	private AlternativePersistence alternativePersistence;
 
@@ -19,22 +21,13 @@ public class MarkNormalizationServiceImpl implements MarkNormalizationService {
 	private BuildPersistence buildPersistence;
 
 	@Override
-	public void doNormalization(Map<Criterion, Mark> normalizationUnit, long alternativesId) {
-		Iterable<Build> buildIterable = buildPersistence.findByAlternativeId(alternativesId);
-
-		int normalizedValue;
-		for(Build build : buildIterable) {
-			Map.Entry<Criterion, Mark> currentCriterionEntry =
-				findNormalizationEntryByCriterionId(build.getCriterion().getId(), normalizationUnit);
-
-			int alternativeCriterionValue = build.getValue();
-			int userCriterionValue = currentCriterionEntry.getValue().getMarkNumberEquivalent();
-
-			normalizedValue = Math.abs(alternativeCriterionValue - userCriterionValue);
-
-			Mark updatedMark = currentCriterionEntry.getValue();
-			updatedMark.setNormalizedMark(normalizedValue);
-			normalizationUnit.put(currentCriterionEntry.getKey(), updatedMark);
+	public void doNormalization(long alternativeId, long criterionId, Mark mark) {
+		Iterable<Build> alternativeCriterions = buildPersistence.findByAlternativeId(alternativeId);
+		for(Build alternativeCriterion : alternativeCriterions) {
+			if (alternativeCriterion.getCriterion().getId() == criterionId) {
+				mark.setNormalizedMark(Math.abs(mark.getMarkNumberEquivalent() - alternativeCriterion.getValue()));
+				break;
+			}
 		}
 	}
 

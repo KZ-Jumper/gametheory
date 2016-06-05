@@ -27,6 +27,11 @@ public class ResultServiceImpl implements ResultService {
     }
 
     @Override
+    public List<Result> getResultByUserId(long userId) {
+        return resultPersistence.findByUserId(userId);
+    }
+
+    @Override
     @Transactional
     public Result saveOrUpdateResult(Result result) {
         return resultPersistence.save(result);

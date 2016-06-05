@@ -15,8 +15,12 @@
     </div>
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
+            <c:forEach items="${alternatives}" var="alternative" varStatus="i">
+                <c:set var="url" value="${url}${i.first ? '?' : '&'}ids=${alternative.id}"/>
+            </c:forEach>
+
             <a href="<c:url value="/decide/methods/1/result"/>" class="btn btn-primary">Use method 1</a>
-            <a href="<c:url value="/decide/methods/2/result"/>" class="btn btn-info">Use method 2</a>
+            <a href="<c:url value="/decide/methods/2/result${url}"/>" class="btn btn-info">Use method 2</a>
             <a href="<c:url value="/decide/methods/3/result"/>" class="btn btn-danger">Use method 3</a>
         </div>
     </div>

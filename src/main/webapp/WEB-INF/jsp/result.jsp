@@ -15,7 +15,12 @@
     </div>
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-
+            <c:forEach items="${results}" var="result">
+                <div>
+                    <h4>${result.alternative.name}</h4>
+                    <h6>${result.range}</h6>
+                </div>
+            </c:forEach>
         </div>
     </div>
 </div>
