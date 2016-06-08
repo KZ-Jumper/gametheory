@@ -3,11 +3,9 @@ package ua.kharkov.nure.sharaban.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import ua.kharkov.nure.sharaban.model.Criterion;
+import ua.kharkov.nure.sharaban.model.LPR;
 import ua.kharkov.nure.sharaban.model.Mark;
 import ua.kharkov.nure.sharaban.service.CriterionService;
 import ua.kharkov.nure.sharaban.service.MarkService;
@@ -16,6 +14,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/marks")
+@SessionAttributes({"user"})
 public class MarkController {
 
     @Autowired
@@ -51,9 +50,11 @@ public class MarkController {
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String add(@ModelAttribute Mark mark) {
+    public String add(@ModelAttribute Mark mark, ModelMap model) {
         Criterion criterion = criterionService.getCriterionByName(mark.getCriterion().getName());
+        LPR user = (LPR) model.get("user");
         mark.setCriterion(criterion);
+        mark.setUser(user);
         markService.saveOrUpdateMark(mark);
 
         return "redirect:/marks";

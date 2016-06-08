@@ -15,4 +15,6 @@ public interface ResultService {
     Result saveOrUpdateResult(Result result);
 
     void deleteResult(long id);
+
+    Result findByAlternativeIdAndUserId(long alternativeId, long userId);
 }
