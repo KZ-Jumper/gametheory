@@ -27,17 +27,8 @@
                     </c:forEach>
                 </select>
 
-                <label>Name</label>
-                <input type="text" name="name" class="form-control" value="${mark.name}" placeholder="Enter name">
-
-                <label>Range</label>
-                <input type="text" name="range" class="form-control" value="${mark.range}" placeholder="Enter range">
-
-                <label>Mark number equivalent</label>
-                <input type="text" name="markNumberEquivalent" class="form-control" value="${mark.markNumberEquivalent}" placeholder="Enter Mark number equivalent">
-
-                <label>Normalized mark</label>
-                <input type="text" name="normalizedMark" class="form-control" value="${mark.normalizedMark}" placeholder="Enter normalized mark">
+                <label>Value</label>
+                <input type="text" name="name" class="form-control" value="${mark.name}" placeholder="Enter value">
 
                 <input type="submit" class="btn btn-success" value="Save">
             </form>

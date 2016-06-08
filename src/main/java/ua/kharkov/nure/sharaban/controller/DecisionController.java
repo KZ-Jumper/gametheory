@@ -46,10 +46,81 @@ public class DecisionController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String view(ModelMap model) {
-        List<Criterion> criteria = criterionService.getAllCriteria();
-        model.addAttribute("criteria", criteria);
+        List<Alternative> alternatives = alternativeService.getAllAlternatives();
+        Alternative first = alternatives.get(0);
+        Alternative second = alternatives.get(1);
+        model.addAttribute("altCount", 1);
+        model.addAttribute("first", first);
+        model.addAttribute("second", second);
 
-        return "decision";
+        List<Vector> firstVectors = vectorService.findByAlternativeId(first.getId());
+        List<Vector> secondVectors = vectorService.findByAlternativeId(second.getId());
+
+        model.addAttribute("firstVectors", firstVectors);
+        model.addAttribute("secondVectors", secondVectors);
+
+        return "pairing";
+    }
+
+    @RequestMapping(value = "/compare", method = RequestMethod.POST)
+    public String compare(@RequestParam int altCount,
+                          @RequestParam int winnerId,
+                          @RequestParam int firstId,
+                          @RequestParam int secondId,
+                          ModelMap model) {
+        LPR user = (LPR) model.get("user");
+
+        Alternative first = alternativeService.getAlternativeById(firstId);
+        Alternative second = alternativeService.getAlternativeById(secondId);
+
+        Alternative winner = first.getId() == winnerId ? first : second;
+
+        Result result = resultService.findByAlternativeIdAndUserId(first.getId(), user.getId());
+        if (result == null) {
+            result = new Result();
+        }
+        result.setLpr(user);
+        result.setAlternative(first);
+        result.setWeight(result.getWeight() + (first.getId() == winnerId ? 1 : 0));
+        resultService.saveOrUpdateResult(result);
+
+        result = resultService.findByAlternativeIdAndUserId(second.getId(), user.getId());
+        if (result == null) {
+            result = new Result();
+        }
+        result.setLpr(user);
+        result.setAlternative(second);
+        result.setWeight(result.getWeight() + (second.getId() == winnerId ? 1 : 0));
+        resultService.saveOrUpdateResult(result);
+
+        List<Alternative> alternatives = alternativeService.getAllAlternatives();
+        if (altCount == alternatives.size() - 1) {
+            result = resultService.findByAlternativeIdAndUserId(winnerId, user.getId());
+            result.setRange(1);
+            resultService.saveOrUpdateResult(result);
+
+            return "redirect:/decide/pairing-result";
+        }
+
+        model.addAttribute("altCount", ++altCount);
+        model.addAttribute("first", winner);
+        model.addAttribute("second", alternatives.get(altCount));
+
+        List<Vector> firstVectors = vectorService.findByAlternativeId(first.getId());
+        List<Vector> secondVectors = vectorService.findByAlternativeId(second.getId());
+
+        model.addAttribute("firstVectors", firstVectors);
+        model.addAttribute("secondVectors", secondVectors);
+
+        return "pairing";
+    }
+
+    @RequestMapping("/pairing-result")
+    public String resultPairing(ModelMap model) {
+        List<Result> results = resultService.getAllResults();
+        model.addAttribute("results", results);
+
+        return "pairing-result";
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)

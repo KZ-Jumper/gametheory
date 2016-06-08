@@ -1,7 +1,6 @@
 package ua.kharkov.nure.sharaban.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.kharkov.nure.sharaban.model.Alternative;
@@ -57,7 +56,7 @@ public class AlternativeServiceImpl implements AlternativeService {
     @Override
     @Transactional
     public void deleteAlternative(long id) {
-        buildPersistence.deleteByAlternativeId(id);
+//        buildPersistence.deleteByAlternativeId(id);
         alternativePersistence.delete(id);
     }
 }

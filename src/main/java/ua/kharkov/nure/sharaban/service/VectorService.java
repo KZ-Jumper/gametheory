@@ -10,6 +10,8 @@ public interface VectorService {
 
     Vector getVectorById(long id);
 
+    List<Vector> findByAlternativeId(long alternativeId);
+
     Vector saveOrUpdateVector(Vector vector);
 
     void deleteVector(long id);

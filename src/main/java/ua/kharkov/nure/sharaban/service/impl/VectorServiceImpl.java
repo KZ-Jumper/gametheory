@@ -27,6 +27,11 @@ public class VectorServiceImpl implements VectorService {
     }
 
     @Override
+    public List<Vector> findByAlternativeId(long alternativeId) {
+        return vectorPersistence.findByAlternativeId(alternativeId);
+    }
+
+    @Override
     @Transactional
     public Vector saveOrUpdateVector(Vector vector) {
         return vectorPersistence.save(vector);

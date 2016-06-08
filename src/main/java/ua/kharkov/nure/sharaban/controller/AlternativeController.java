@@ -5,8 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ua.kharkov.nure.sharaban.model.Alternative;
-import ua.kharkov.nure.sharaban.model.Build;
-import ua.kharkov.nure.sharaban.model.Criterion;
+import ua.kharkov.nure.sharaban.model.LPR;
 import ua.kharkov.nure.sharaban.service.AlternativeService;
 import ua.kharkov.nure.sharaban.service.CriterionService;
 
@@ -31,43 +30,21 @@ public class AlternativeController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String getEditPage(ModelMap model) {
-        List<String> names = criterionService.getAllCriteriaNames();
-        model.addAttribute("criteria", names);
-
+    public String getEditPage() {
         return "alternative_edit";
     }
 
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
     public String getEditPage(@PathVariable long id, ModelMap model) {
         Alternative alternative = alternativeService.getAlternativeById(id);
-        List<Build> builds = alternativeService.getBuildsByAlternativeId(id);
         model.addAttribute("alternative", alternative);
-        model.addAttribute("builds", builds);
 
         return "alternative_edit";
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String add(@ModelAttribute Alternative alternative,
-                      @RequestParam int[] values,
-                      @RequestParam(required = false) Long[] buildIds) {
-        alternative = alternativeService.saveOrUpdateAlternative(alternative);
-        List<String> criteriaNames = criterionService.getAllCriteriaNames();
-        for (int i = 0; i < values.length; i++) {
-            Build build;
-            if (buildIds == null) {
-                build = new Build();
-                Criterion criterion = criterionService.getCriterionByName(criteriaNames.get(i));
-                build.setCriterion(criterion);
-                build.setAlternative(alternative);
-            } else {
-                build = alternativeService.getBuildById(buildIds[i]);
-            }
-            build.setValue(values[i]);
-
-            alternativeService.saveOrUpdateBuild(build);
-        }
+    public String add(@ModelAttribute Alternative alternative) {
+        alternativeService.saveOrUpdateAlternative(alternative);
 
         return "redirect:/alternatives";
     }
